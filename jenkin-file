@@ -10,63 +10,79 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                echo 'Tool: mavern'
+                // Use the "Maven" plugin for Jenkins to build the project.
+                // This assumes that the Maven plugin is properly configured.
+                withMaven(maven: 'Maven') {
+                    bat 'mvn clean install' // Use 'bat' for Windows or 'mvn' for Linux
+                }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                echo 'Simulating test execution using tools like JUnit or TestNG.'
-                // Placeholder for test command, e.g., `mvn test`
+                // This assumes the Maven plugin is already configured.
+                withMaven(maven: 'Maven') {
+                    bat 'mvn test' // Use 'bat' for Windows or 'mvn' for Linux
+                }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Analyzing the code quality...'
-                echo 'Simulating code analysis using a tool like SonarQube.'
-                // Placeholder for code analysis command, e.g., `sonar-scanner`
+                echo 'Analyzing the code with SonarQube...'
+                // Assuming the SonarQube plugin is installed and configured in Jenkins.
+                withSonarQubeEnv('SonarQube') {
+                    bat 'mvn sonar:sonar' // Use 'bat' for Windows or 'mvn sonar:sonar' for Linux
+                }
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan on the code...'
-                echo 'Simulating security scan using a tool like OWASP Dependency-Check.'
-                // Placeholder for security scan command, e.g., `dependency-check.sh`
+                echo 'Performing security scan...'
+                // If you're using a Jenkins plugin for security scans like OWASP Dependency-Check.
+                dependencyCheck additionalArguments: '--project my-app --scan /path/to/project'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the application to the Staging environment...'
-                echo 'Simulating deployment using tools like AWS CLI or other deployment scripts.'
-                // Placeholder for deployment command, e.g., `aws deploy`
+                echo 'Deploying to Staging environment...'
+                // Assuming the use of a Jenkins plugin for AWS deployments.
+                awsDeploy applicationName: 'MyApp', s3Bucket: 'my-bucket', filePath: 'path/to/my-app.zip'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on the Staging environment...'
-                echo 'Simulating staging environment tests using tools like Selenium or other frameworks.'
-                // Placeholder for integration test command on staging, e.g., `mvn verify -Pstaging`
+                // For example, using the Selenium plugin or Maven tests on the staging profile.
+                withMaven(maven: 'Maven') {
+                    bat 'mvn test -Dselenium.profile=staging'
+                }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying the application to the Production environment...'
-                echo 'Simulating deployment to production using tools like AWS CLI.'
-                // Placeholder for production deployment command, e.g., `aws deploy`
+                echo 'Deploying to Production environment...'
+                // Assuming the use of a Jenkins plugin for AWS deployments.
+                awsDeploy applicationName: 'MyApp', s3Bucket: 'my-bucket', filePath: 'path/to/my-app.zip'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully.'
-            echo 'Sending success notification email...'
-            // Placeholder for email notification on success
+            emailext(
+                subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
+                to: "konellyskaishann@gmail.com",
+                attachLog: true
+            )
         }
         failure {
-            echo 'Pipeline failed.'
-            echo 'Sending failure notification email...'
-            // Placeholder for email notification on failure
+            emailext(
+                subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
+                to: "konellyskaishann@gmail.com",
+                attachLog: true
+            )
         }
     }
 }
