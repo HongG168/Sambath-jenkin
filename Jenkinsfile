@@ -29,7 +29,7 @@ pipeline {
                 failure {
                     mail(
                         subject: "Unit and Integration Tests",
-                        body: "The pipeline failed.",
+                        body: "The pipeline of Unit and Integration Tests failed.",
                         to: "babybear168888@gmail.com"
                     )
                 }
@@ -57,7 +57,7 @@ pipeline {
                 failure {
                     mail(
                         subject: "Security scan",
-                        body: "The pipeline failed.",
+                        body: "The pipeline of security scan failed.",
                         to: "babybear168888@gmail.com"
                     )
                 }
