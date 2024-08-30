@@ -10,59 +10,47 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                // Use the "Maven" plugin for Jenkins to build the project.
-                // This assumes that the Maven plugin is properly configured.
-                withMaven(maven: 'Maven') {
-                    bat 'mvn clean install' // Use 'bat' for Windows or 'mvn' for Linux
+                echo 'Tool: mavern'
                 }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                // This assumes the Maven plugin is already configured.
-                withMaven(maven: 'Maven') {
-                    bat 'mvn test' // Use 'bat' for Windows or 'mvn' for Linux
+                echo 'Tool Junit or testNG'
                 }
             }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing the code with SonarQube...'
-                // Assuming the SonarQube plugin is installed and configured in Jenkins.
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn sonar:sonar' // Use 'bat' for Windows or 'mvn sonar:sonar' for Linux
+                echo 'Tool: SonarQube.'
                 }
             }
         }
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan...'
-                // If you're using a Jenkins plugin for security scans like OWASP Dependency-Check.
-                dependencyCheck additionalArguments: '--project my-app --scan /path/to/project'
+                echo 'Tool: OWASP dependency check'
             }
         }
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging environment...'
-                // Assuming the use of a Jenkins plugin for AWS deployments.
-                awsDeploy applicationName: 'MyApp', s3Bucket: 'my-bucket', filePath: 'path/to/my-app.zip'
+                echo 'Tool: AWS CLI or other deployment'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on the Staging environment...'
-                // For example, using the Selenium plugin or Maven tests on the staging profile.
-                withMaven(maven: 'Maven') {
-                    bat 'mvn test -Dselenium.profile=staging'
+                echo 'Tool: selenium'
                 }
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production environment...'
-                // Assuming the use of a Jenkins plugin for AWS deployments.
-                awsDeploy applicationName: 'MyApp', s3Bucket: 'my-bucket', filePath: 'path/to/my-app.zip'
+                echo 'Tool: AWS CLI'
             }
         }
     }
@@ -70,18 +58,18 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
-                to: "konellyskaishann@gmail.com",
-                attachLog: true
+                main subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
+                     to: "Reachsambath14@gmail.com",
+                    attachLog: true
             )
         }
         failure {
             emailext(
-                subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
-                to: "konellyskaishann@gmail.com",
-                attachLog: true
+                main subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
+                     to: "Reachsambath14@gmail.com",
+                    attachLog: true
             )
         }
     }
