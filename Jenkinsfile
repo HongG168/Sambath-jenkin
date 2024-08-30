@@ -19,20 +19,21 @@ pipeline {
                 echo 'Tool: Junit or testNG'
             }
             post {
-        success {
-            mail(
-                subject: "Unit and Integration Tests",
-                body: "Unit and Integration Tests stage is success",
-                to: "babybear168888@gmail.com"
-            )
-        }
-        failure {
-            mail(
-                subject: "Unit and Integration Tests",
-                body: "The pipeline failed.",
-                to: "babybear168888@gmail.com"
-            )
-        }
+                success {
+                    mail(
+                        subject: "Unit and Integration Tests",
+                        body: "Unit and Integration Tests stage is successful",
+                        to: "babybear168888@gmail.com"
+                    )
+                }
+                failure {
+                    mail(
+                        subject: "Unit and Integration Tests",
+                        body: "The pipeline failed.",
+                        to: "babybear168888@gmail.com"
+                    )
+                }
+            }
         }
         stage('Code Analysis') {
             steps {
@@ -46,21 +47,21 @@ pipeline {
                 echo 'Tool: OWASP dependency check'
             }
             post {
-        success {
-            mail(
-                subject: "Security scan",
-                body: "security scan stage is success",
-                to: "babybear168888@gmail.com"
-            )
-        }
-        failure {
-            mail(
-                subject: "security scan",
-                body: "The pipeline failed.",
-                to: "babybear168888@gmail.com"
-            )
-        }
-            
+                success {
+                    mail(
+                        subject: "Security scan",
+                        body: "Security scan stage is successful",
+                        to: "babybear168888@gmail.com"
+                    )
+                }
+                failure {
+                    mail(
+                        subject: "Security scan",
+                        body: "The pipeline failed.",
+                        to: "babybear168888@gmail.com"
+                    )
+                }
+            }
         }
         stage('Deploy to Staging') {
             steps {
