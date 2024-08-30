@@ -18,6 +18,21 @@ pipeline {
                 echo 'Running unit and integration tests...'
                 echo 'Tool: Junit or testNG'
             }
+            post {
+        success {
+            mail(
+                subject: "Unit and Integration Tests",
+                body: "Unit and Integration Tests stage is success",
+                to: "babybear168888@gmail.com"
+            )
+        }
+        failure {
+            mail(
+                subject: "Unit and Integration Tests",
+                body: "The pipeline failed.",
+                to: "babybear168888@gmail.com"
+            )
+        }
         }
         stage('Code Analysis') {
             steps {
@@ -30,6 +45,22 @@ pipeline {
                 echo 'Performing security scan...'
                 echo 'Tool: OWASP dependency check'
             }
+            post {
+        success {
+            mail(
+                subject: "Security scan",
+                body: "security scan stage is success",
+                to: "babybear168888@gmail.com"
+            )
+        }
+        failure {
+            mail(
+                subject: "security scan",
+                body: "The pipeline failed.",
+                to: "babybear168888@gmail.com"
+            )
+        }
+            
         }
         stage('Deploy to Staging') {
             steps {
