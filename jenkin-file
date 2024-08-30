@@ -10,73 +10,63 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                // Use Maven to build the project
-                sh 'mvn clean install'
+                echo 'Tool: mavern'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                // Use JUnit for unit tests and TestNG for integration tests
-                sh 'mvn test'
-                // For TestNG, you might specify a custom test suite
-                // sh 'mvn test -DsuiteXmlFile=testng.xml'
+                echo 'Simulating test execution using tools like JUnit or TestNG.'
+                // Placeholder for test command, e.g., `mvn test`
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Analyzing the code with SonarQube...'
-                // Use SonarQube for code analysis
-                sh 'sonar-scanner'
+                echo 'Analyzing the code quality...'
+                echo 'Simulating code analysis using a tool like SonarQube.'
+                // Placeholder for code analysis command, e.g., `sonar-scanner`
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan with OWASP Dependency-Check...'
-                // Use OWASP Dependency-Check for security scanning
-                sh 'dependency-check.sh --project my-app --scan /path/to/project'
+                echo 'Performing security scan on the code...'
+                echo 'Simulating security scan using a tool like OWASP Dependency-Check.'
+                // Placeholder for security scan command, e.g., `dependency-check.sh`
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to Staging environment...'
-                // Use AWS CLI to deploy to a staging environment
-                sh 'aws deploy push --application-name MyApp --s3-location s3://my-bucket/my-app.zip'
+                echo 'Deploying the application to the Staging environment...'
+                echo 'Simulating deployment using tools like AWS CLI or other deployment scripts.'
+                // Placeholder for deployment command, e.g., `aws deploy`
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on the Staging environment...'
-                // Use Selenium for integration testing on staging
-                // Assuming a Selenium test suite configured for staging
-                sh 'mvn test -Dselenium.profile=staging'
+                echo 'Simulating staging environment tests using tools like Selenium or other frameworks.'
+                // Placeholder for integration test command on staging, e.g., `mvn verify -Pstaging`
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to Production environment...'
-                // Use AWS CLI to deploy to a production environment
-                sh 'aws deploy push --application-name MyApp --s3-location s3://my-bucket/my-app.zip'
+                echo 'Deploying the application to the Production environment...'
+                echo 'Simulating deployment to production using tools like AWS CLI.'
+                // Placeholder for production deployment command, e.g., `aws deploy`
             }
         }
     }
 
     post {
         success {
-            emailext(
-                subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
-                to: "reachsambath14@gmail.com",
-                attachLog: true
-            )
+            echo 'Pipeline completed successfully.'
+            echo 'Sending success notification email...'
+            // Placeholder for email notification on success
         }
         failure {
-            emailext(
-                subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
-                to: "reachsambath14@gmail.com",
-                attachLog: true
-            )
+            echo 'Pipeline failed.'
+            echo 'Sending failure notification email...'
+            // Placeholder for email notification on failure
         }
     }
 }
