@@ -11,21 +11,18 @@ pipeline {
             steps {
                 echo 'Building the project...'
                 echo 'Tool: mavern'
-                }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                echo 'Tool Junit or testNG'
-                }
+                echo 'Tool: Junit or testNG'
             }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing the code with SonarQube...'
-                echo 'Tool: SonarQube.'
-                }
+                echo 'Tool: SonarQube'
             }
         }
         stage('Security Scan') {
@@ -44,7 +41,6 @@ pipeline {
             steps {
                 echo 'Running integration tests on the Staging environment...'
                 echo 'Tool: selenium'
-                }
             }
         }
         stage('Deploy to Production') {
@@ -58,18 +54,16 @@ pipeline {
     post {
         success {
             emailext(
-                main subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
-                     to: "Reachsambath14@gmail.com",
-                    
+                subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
+                to: "Reachsambath14@gmail.com"
             )
         }
         failure {
             emailext(
-                main subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
-                     to: "Reachsambath14@gmail.com",
-                    
+                subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
+                to: "Reachsambath14@gmail.com"
             )
         }
     }
