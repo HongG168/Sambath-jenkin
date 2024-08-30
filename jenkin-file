@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+    environment {
+        DIRECTORY_PATH = '/path/to/code/directory' // Replace with actual path
+        TESTING_ENVIRONMENT = 'TestingEnvironment'
+        PRODUCTION_ENVIRONMENT = 'Reachsambath Production'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+                // Use Maven to build the project
+                sh 'mvn clean install'
+            }
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Running unit and integration tests...'
+                // Use JUnit for unit tests and TestNG for integration tests
+                sh 'mvn test'
+                // For TestNG, you might specify a custom test suite
+                // sh 'mvn test -DsuiteXmlFile=testng.xml'
+            }
+        }
+        stage('Code Analysis') {
+            steps {
+                echo 'Analyzing the code with SonarQube...'
+                // Use SonarQube for code analysis
+                sh 'sonar-scanner'
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                echo 'Performing security scan with OWASP Dependency-Check...'
+                // Use OWASP Dependency-Check for security scanning
+                sh 'dependency-check.sh --project my-app --scan /path/to/project'
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying to Staging environment...'
+                // Use AWS CLI to deploy to a staging environment
+                sh 'aws deploy push --application-name MyApp --s3-location s3://my-bucket/my-app.zip'
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests on the Staging environment...'
+                // Use Selenium for integration testing on staging
+                // Assuming a Selenium test suite configured for staging
+                sh 'mvn test -Dselenium.profile=staging'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying to Production environment...'
+                // Use AWS CLI to deploy to a production environment
+                sh 'aws deploy push --application-name MyApp --s3-location s3://my-bucket/my-app.zip'
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                subject: "Pipeline Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.",
+                to: "reachsambath14@gmail.com",
+                attachLog: true
+            )
+        }
+        failure {
+            emailext(
+                subject: "Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "The pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.",
+                to: "reachsambath14@gmail.com",
+                attachLog: true
+            )
+        }
+    }
+}
